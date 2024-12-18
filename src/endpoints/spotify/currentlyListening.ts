@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import "dotenv/config";
+import { error } from "node:console";
 
 export default {
 	url: "/spotify/@current",
@@ -31,7 +32,7 @@ export default {
 			} else return await a.json();
 		});
 
-		const currentlyListening = await fetch(
+		await fetch(
 			"https://api.spotify.com/v1/me/player/currently-playing?market=US",
 			{
 				headers: {
@@ -46,22 +47,12 @@ export default {
 			} else {
 				const d = await a.text();
 				if (d === null || d === "")
-					throw new Error(
-						"Sorry! I'm not listening to any music right now!"
-					);
-				else return JSON.parse(d);
+					return reply.send({
+						message: "Sorry! I'm not currently listening to music!",
+						error: true,
+					});
+				else return reply.send(JSON.parse(d));
 			}
 		});
-
-		currentlyListening
-			.then((p) => {
-				return reply.send(p);
-			})
-			.catch((err) => {
-				return reply.send({
-					message: err.message,
-					statusCode: 500,
-				});
-			});
 	},
 };
