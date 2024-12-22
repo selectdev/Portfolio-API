@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import "dotenv/config";
-import { error } from "node:console";
 
 export default {
 	url: "/spotify/@current",
