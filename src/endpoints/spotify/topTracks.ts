@@ -2,12 +2,11 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import "dotenv/config";
 
 export default {
-	url: "/spotify/@recent",
+	url: "/spotify/@top",
 	method: "GET",
 	schema: {
-		summary: "Get recent songs",
-		description:
-			"Returns the recently listened to songs of portfolio owner",
+		summary: "Get top 4 tracks",
+		description: "Returns the top 4 tracks listened by portfolio owner",
 		tags: ["spotify"],
 	},
 	handler: async (request: FastifyRequest, reply: FastifyReply) => {
@@ -33,7 +32,7 @@ export default {
 		});
 
 		await fetch(
-			"https://api.spotify.com/v1/me/player/recently-played?limit=4&market=US",
+			"https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=4&offset=0",
 			{
 				headers: {
 					Authorization: "Bearer " + auth.access_token,
